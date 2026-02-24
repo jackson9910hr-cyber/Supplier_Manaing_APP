@@ -10,49 +10,55 @@
 
   <style>
     :root{
-      /* Tech/AI theme */
-      --bg0:#070A12;
-      --bg1:#0B1020;
-      --glass: rgba(255,255,255,0.06);
-      --glass2: rgba(255,255,255,0.10);
-      --line: rgba(255,255,255,0.12);
-      --line2: rgba(255,255,255,0.18);
-      --text:#EAF0FF;
-      --muted:#A7B0C4;
+      /* ===== Light Tech Theme (밝은 느낌) ===== */
+      --bg0:#f7f9ff;
+      --bg1:#eef2ff;
+      --card: rgba(255,255,255,0.82);
+      --card2: rgba(255,255,255,0.70);
+      --line: rgba(15,23,42,0.12);
+      --line2: rgba(15,23,42,0.18);
 
-      --primary:#7C3AED;     /* violet */
-      --accent:#22D3EE;      /* cyan */
-      --good:#34D399;
-      --danger:#FB7185;
+      --text:#0b1220;
+      --muted:#475569;
 
-      --shadow: 0 18px 50px rgba(0,0,0,0.55);
-      --shadow2: 0 10px 24px rgba(0,0,0,0.38);
+      --primary:#6D28D9;   /* violet */
+      --accent:#0891B2;    /* cyan */
+      --good:#16A34A;
+      --danger:#E11D48;
+
+      --shadow: 0 14px 36px rgba(2,6,23,0.10);
+      --shadow2: 0 8px 18px rgba(2,6,23,0.10);
       --radius: 14px;
+
+      --tableHead: rgba(255,255,255,0.90);
+      --tableRow: rgba(255,255,255,0.65);
     }
+
     *{ box-sizing:border-box; }
     html, body{ height:100%; }
+
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(124,58,237,0.25), transparent 55%),
-        radial-gradient(900px 600px at 85% 15%, rgba(34,211,238,0.18), transparent 55%),
-        radial-gradient(900px 600px at 50% 105%, rgba(52,211,153,0.10), transparent 55%),
+        radial-gradient(1200px 700px at 15% 10%, rgba(109,40,217,0.14), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(8,145,178,0.12), transparent 55%),
+        radial-gradient(900px 600px at 50% 105%, rgba(22,163,74,0.08), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    /* subtle tech grid */
+    /* subtle grid (밝게) */
     body::before{
       content:"";
       position:fixed;
       inset:0;
       background:
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(ellipse at 50% 10%, rgba(0,0,0,0.9), rgba(0,0,0,0.15) 55%, transparent 75%);
+        linear-gradient(rgba(2,6,23,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(2,6,23,0.04) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(ellipse at 50% 10%, rgba(0,0,0,0.55), rgba(0,0,0,0.18) 55%, transparent 78%);
       pointer-events:none;
       z-index:0;
     }
@@ -63,7 +69,7 @@
       top:0;
       z-index:20;
       backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.72));
       border-bottom:1px solid var(--line);
       padding:12px 14px;
     }
@@ -92,7 +98,7 @@
       padding:6px 10px;
       border-radius:999px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.75);
       box-shadow: var(--shadow2);
       font-size:12px;
       color:var(--muted);
@@ -100,8 +106,8 @@
     }
     .dot{
       width:8px; height:8px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
-      box-shadow: 0 0 14px rgba(34,211,238,0.55);
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(8,145,178,0.95));
+      box-shadow: 0 0 14px rgba(8,145,178,0.25);
     }
 
     h1.app-title{
@@ -110,7 +116,7 @@
       font-weight:950;
       letter-spacing:-0.3px;
       line-height:1.15;
-      text-shadow: 0 10px 20px rgba(0,0,0,0.35);
+      text-shadow: 0 8px 18px rgba(2,6,23,0.08);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -119,15 +125,14 @@
     .save-status{
       font-size:12px;
       color:var(--muted);
-      font-weight:700;
+      font-weight:800;
     }
     .save-status.need-save{
       color:var(--danger);
       font-weight:950;
-      text-shadow: 0 0 18px rgba(251,113,133,0.35);
+      text-shadow: 0 0 14px rgba(225,29,72,0.18);
     }
 
-    /* (2) 오른쪽 상단 메타 */
     .top-meta{
       display:flex;
       flex-direction:column;
@@ -143,10 +148,10 @@
       padding:7px 10px;
       border-radius:999px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.75);
       color:var(--muted);
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       box-shadow: var(--shadow2);
       white-space:nowrap;
     }
@@ -156,8 +161,8 @@
     }
     .meta-sub{
       font-size:12px;
-      color:rgba(234,240,255,0.70);
-      font-weight:700;
+      color:rgba(2,6,23,0.70);
+      font-weight:800;
       letter-spacing:0.2px;
       white-space:nowrap;
     }
@@ -171,7 +176,7 @@
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, var(--card), var(--card2));
       border:1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -190,8 +195,8 @@
     .summary-title::before{
       content:"";
       width:10px; height:10px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--primary));
-      box-shadow: 0 0 16px rgba(124,58,237,0.55);
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(109,40,217,0.9));
+      box-shadow: 0 0 14px rgba(109,40,217,0.18);
     }
 
     textarea.summary{
@@ -204,44 +209,55 @@
       resize:vertical;
       font-size:13px;
       line-height:1.35;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.85);
       color:var(--text);
       white-space:pre-wrap;
       word-break:break-word;
       overflow-wrap:anywhere;
     }
-    textarea.summary::placeholder{ color: rgba(234,240,255,0.45); }
+    textarea.summary::placeholder{ color: rgba(71,85,105,0.70); }
 
+    /* ====== 메인 테이블: 가로스크롤 최소화(열폭 % 기반) ====== */
     .table-scroll{
       overflow:auto;
       border-radius:12px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.55);
     }
 
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1200px;
+      table-layout:fixed;              /* ✅ 깨짐/튀어나옴 방지 */
+      min-width:0;                     /* ✅ 기존 1200 제거 */
     }
 
+    /* col widths (%로 전체폭에 맞게) */
+    col.c-project{ width:9%; }
+    col.c-item{    width:11%; }
+    col.c-vendor{  width:9%; }
+    col.c-date{    width:9%; } /* 4개 date = 36% */
+    col.c-status{  width:17%; }
+    col.c-note{    width:18%; } /* 합 100% */
+
     th, td{
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      border-right:1px solid rgba(255,255,255,0.08);
+      border-bottom:1px solid rgba(2,6,23,0.08);
+      border-right:1px solid rgba(2,6,23,0.08);
       vertical-align:top;
+      overflow:hidden;                 /* ✅ 비고 튀어나옴 방지 */
     }
     th:last-child, td:last-child{ border-right:none; }
 
     thead th{
       position:sticky;
       top:0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      background: var(--tableHead);
       z-index:2;
-      font-size:12.5px;
+      font-size:12px;
       text-align:center;
-      padding:11px 8px;
+      padding:10px 6px;
       white-space:nowrap;
-      color: rgba(234,240,255,0.92);
+      color: var(--text);
       letter-spacing:0.2px;
       backdrop-filter: blur(10px);
     }
@@ -250,39 +266,31 @@
 
     textarea.cell{
       width:100%;
-      min-height:46px;
-      padding:10px;
+      min-height:44px;
+      padding:9px 8px;
       border:0;
       outline:none;
       resize:vertical;
-      font-size:13px;
+      font-size:12.5px;               /* ✅ 폭 줄이기 위해 살짝 다운 */
       line-height:1.35;
       background: transparent;
       color: var(--text);
       white-space:pre-wrap;
       word-break:break-word;
-      overflow-wrap:anywhere;
+      overflow-wrap:anywhere;         /* ✅ 긴 텍스트도 줄바꿈 */
     }
-    textarea.cell::placeholder{ color: rgba(234,240,255,0.40); }
+    textarea.cell::placeholder{ color: rgba(71,85,105,0.65); }
     textarea.cell.center{ text-align:center; }
     textarea.cell.danger{
       color:var(--danger);
       font-weight:950;
-      text-shadow: 0 0 16px rgba(251,113,133,0.25);
+      text-shadow: 0 0 12px rgba(225,29,72,0.16);
     }
-
-    /* col widths */
-    col.c-project{ width:140px; }
-    col.c-item{ width:160px; }
-    col.c-vendor{ width:140px; }
-    col.c-date{ width:120px; }
-    col.c-status{ width:460px; }
-    col.c-note{ width:220px; }
 
     .hint{
       margin-top:10px;
       font-size:12px;
-      color: rgba(234,240,255,0.65);
+      color: rgba(2,6,23,0.65);
       line-height:1.45;
     }
 
@@ -304,9 +312,9 @@
       content:"";
       width:10px; height:10px; border-radius:3px;
       background: linear-gradient(135deg, var(--accent), var(--primary));
-      box-shadow: 0 0 16px rgba(34,211,238,0.30);
+      box-shadow: 0 0 14px rgba(8,145,178,0.18);
     }
-    .photos-sub{ font-size:12px; color: rgba(234,240,255,0.65); }
+    .photos-sub{ font-size:12px; color: rgba(2,6,23,0.65); }
 
     .photo-grid{
       display:grid;
@@ -317,7 +325,7 @@
       border:1px solid var(--line);
       border-radius:12px;
       overflow:hidden;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.80);
       position:relative;
       cursor:pointer;
       box-shadow: var(--shadow2);
@@ -326,8 +334,8 @@
       content:"삭제하려면 사진을 탭";
       position:absolute;
       left:8px; right:8px; bottom:8px;
-      background: rgba(251,113,133,0.92);
-      color:#07101a;
+      background: rgba(225,29,72,0.92);
+      color:#fff;
       font-size:11px;
       padding:6px 8px;
       border-radius:10px;
@@ -338,21 +346,21 @@
     .photo-desc{
       width:100%;
       border:0;
-      border-bottom:1px solid rgba(255,255,255,0.10);
+      border-bottom:1px solid rgba(2,6,23,0.10);
       padding:10px;
       font-size:12px;
       outline:none;
-      background: rgba(255,255,255,0.04);
+      background: rgba(248,250,252,0.90);
       color: var(--text);
-      text-align:center; /* 사진설명 가운데 */
+      text-align:center;
     }
-    .photo-desc::placeholder{ color: rgba(234,240,255,0.40); }
+    .photo-desc::placeholder{ color: rgba(71,85,105,0.65); }
     img.photo-img{
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
       display:block;
-      filter: saturate(1.02) contrast(1.02);
+      filter: saturate(1.03) contrast(1.02);
     }
 
     /* bottom bar */
@@ -366,13 +374,13 @@
       flex-wrap:wrap;
       justify-content:center;
       backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.76));
       border-top: 1px solid var(--line);
     }
 
     button.btn{
       border:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.82);
       color: var(--text);
       padding:9px 10px;
       border-radius:12px;
@@ -383,19 +391,19 @@
       box-shadow: var(--shadow2);
       transition: transform .06s ease, filter .12s ease, border-color .12s ease;
     }
-    button.btn:hover{ filter:brightness(1.08); border-color: rgba(255,255,255,0.22); }
+    button.btn:hover{ filter:brightness(1.03); border-color: rgba(2,6,23,0.22); }
     button.btn:active{ transform:translateY(1px); }
 
     button.primary{
-      border-color: rgba(124,58,237,0.55);
-      background: linear-gradient(135deg, rgba(124,58,237,0.95), rgba(34,211,238,0.75));
-      color:#061018;
+      border-color: rgba(109,40,217,0.35);
+      background: linear-gradient(135deg, rgba(109,40,217,0.92), rgba(8,145,178,0.78));
+      color:#fff;
       font-weight:950;
     }
     button.danger{
-      border-color: rgba(251,113,133,0.65);
-      background: linear-gradient(135deg, rgba(251,113,133,0.95), rgba(255,255,255,0.10));
-      color:#061018;
+      border-color: rgba(225,29,72,0.40);
+      background: linear-gradient(135deg, rgba(225,29,72,0.92), rgba(255,255,255,0.20));
+      color:#fff;
       font-weight:950;
     }
 
@@ -407,18 +415,24 @@
       z-index:50;
     }
     .modal.show{ display:block; }
+
     .backdrop{
       position:absolute;
       inset:0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(4px);
+      background: rgba(2,6,23,0.35);  /* ✅ 너무 어둡지 않게 */
+      backdrop-filter: blur(6px);
     }
+
+    /* ✅ 전체화면에서 폭을 더 넓게(열 다 들어오게) */
+    #fullModal .modal-card{
+      width: min(1400px, 98vw);
+      height: min(92vh, 980px);
+    }
+
     .modal-card{
       position:relative;
       margin:24px auto;
-      width:min(1100px, 94vw);
-      height:min(82vh, 900px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72));
       border:1px solid var(--line);
       border-radius:16px;
       box-shadow: var(--shadow);
@@ -426,22 +440,23 @@
       display:flex;
       flex-direction:column;
       backdrop-filter: blur(14px);
+      color: var(--text);
     }
+
     .modal-head{
       display:flex;
       justify-content:space-between;
       align-items:center;
       padding:12px 14px;
       border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.70);
       flex:0 0 auto;
     }
     .modal-title{ font-weight:950; }
     .modal-body{ padding:14px; overflow:auto; flex:1 1 auto; }
 
-    /* 모바일 full */
     @media (max-width: 900px){
-      .modal-card{
+      #fullModal .modal-card{
         width:100vw;
         height:100vh;
         margin:0;
@@ -451,42 +466,53 @@
       .top-meta{ min-width: 170px; }
     }
 
+    /* ===== 전체화면 캡쳐영역도 메인과 동일한 톤(색상 다름 문제 해결) ===== */
     .capture-area{
-      background:#ffffff;
-      padding:10px;
-      color:#0b1220;
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid var(--line);
+      padding:12px;
+      color:var(--text);
       border-radius:12px;
+      box-shadow: var(--shadow2);
     }
     .full-title{ font-size:18px; font-weight:950; margin-bottom:6px; }
-    .full-meta{ font-size:12px; color:#4b5563; margin-bottom:10px; }
+    .full-meta{ font-size:12px; color:var(--muted); margin-bottom:10px; }
 
     .full-summary-title{ font-weight:950; margin:10px 0 6px; }
     .full-summary{
-      border:1px solid #cfd3dc;
+      border:1px solid var(--line2);
       border-radius:10px;
       padding:10px;
       font-size:12px;
       white-space:pre-wrap;
       word-break:break-word;
       overflow-wrap:anywhere;
-      background:#fff;
+      background: rgba(255,255,255,0.82);
     }
 
+    /* ✅ 전체화면 테이블 깨짐 방지 + 모든 열이 들어오게 */
     table.full-table{
       width:100%;
       border-collapse:collapse;
-      font-size:12px;
-      table-layout:fixed;
+      font-size:11.5px;
+      table-layout:fixed;                 /* ✅ 고정 레이아웃 */
+      background: rgba(255,255,255,0.70);
+      border:1px solid var(--line);
     }
     table.full-table th, table.full-table td{
-      border:1px solid #cfd3dc;
-      padding:6px;
+      border:1px solid rgba(2,6,23,0.10);
+      padding:6px 6px;
       vertical-align:top;
       white-space:pre-wrap;
       word-break:break-word;
       overflow-wrap:anywhere;
+      overflow:hidden;                    /* ✅ 비고/긴문장 튀어나옴 방지 */
     }
-    table.full-table th{ background:#f2f4f8; text-align:center; }
+    table.full-table th{
+      background: rgba(255,255,255,0.92);
+      text-align:center;
+      font-weight:950;
+    }
     .full-center{ text-align:center; }
 
     .full-photos{
@@ -499,7 +525,7 @@
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
-      border:1px solid #cfd3dc;
+      border:1px solid var(--line);
       border-radius:8px;
     }
 
@@ -508,7 +534,7 @@
       position:relative;
       margin:24px auto;
       width:min(560px, 92vw);
-      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.74));
       border:1px solid var(--line);
       border-radius:16px;
       box-shadow: var(--shadow);
@@ -520,7 +546,7 @@
       padding:12px 14px;
       font-weight:950;
       border-bottom:1px solid var(--line);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.72);
     }
     .dialog-body{ padding:14px; font-size:13px; line-height:1.4; }
     .dialog-actions{
@@ -529,16 +555,17 @@
       gap:8px;
       justify-content:flex-end;
       border-top:1px solid var(--line);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.65);
       flex-wrap:wrap;
     }
-    .small{ font-size:12px; color: rgba(234,240,255,0.70); }
+    .small{ font-size:12px; color: rgba(71,85,105,0.85); }
 
     @media (max-width: 520px){
       .photo-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       footer.bottombar{ gap:6px; }
       button.btn{ padding:9px 9px; }
       .app-badge{ display:none; }
+      textarea.cell{ font-size:12px; }
     }
   </style>
 </head>
@@ -552,7 +579,6 @@
         <div class="save-status" id="saveStatus">not saved_ 저장하세요</div>
       </div>
 
-      <!-- (2) 오른쪽 상단 날짜 + 개발자 -->
       <div class="top-meta">
         <div class="meta-chip"><strong id="todayText">YYYY-MM-DD</strong> <span style="opacity:.8;">Today</span></div>
         <div class="meta-sub">App Developed by <span style="font-weight:950; color:var(--text);">Jackson.Lee</span></div>
@@ -561,7 +587,6 @@
   </header>
 
   <main>
-    <!-- Summary 입력칸 -->
     <section class="card summary-wrap">
       <div class="summary-title">협의결과 Summary</div>
       <textarea class="summary" id="summaryInput" placeholder="여기에 협의결과 Summary를 입력해 (Enter 줄바꿈 가능)"></textarea>
@@ -600,8 +625,8 @@
 
       <div class="hint">
         - 모든 입력칸은 Enter로 줄바꿈 가능 (textarea)<br/>
-        - 제작현황 열은 넓게 + 줄바꿈/짤림 없음<br/>
-        - 저장 폴더저장(가능 브라우저) / 공유시트 / 다운로드 지원
+        - 제작현황/비고 포함 모든 열이 화면에 최대한 맞도록 열 폭 최적화<br/>
+        - 전체화면에서도 색상/레이아웃 동일하게 유지 + 테이블 깨짐 방지
       </div>
     </section>
 
@@ -615,7 +640,6 @@
     </section>
   </main>
 
-  <!-- 하단 버튼 -->
   <footer class="bottombar">
     <button class="btn" id="btnAddRow">행추가</button>
     <button class="btn" id="btnDelRow">행삭제</button>
@@ -670,7 +694,7 @@
       dirty: true,
       savedFileName: "",
       dirHandle: null,
-      photos: [], // {desc:"", dataUrl:""}
+      photos: [],
       photoDeleteMode: false,
       summary: ""
     };
@@ -688,18 +712,19 @@
     ];
 
     const CENTER_KEYS_MAIN = new Set(["project","item","vendor","custDue","poDue","reqDue","availDue"]);
-    const CENTER_KEYS_FULL = new Set(["project","item","vendor","custDue","poDue","reqDue","availDue"]); // 제작현황/비고 제외
+    const CENTER_KEYS_FULL = new Set(["project","item","vendor","custDue","poDue","reqDue","availDue"]);
 
+    /* ✅ 전체화면(colgroup) 계산용: 비고/제작현황 비중을 과도하게 키우지 않음 */
     const COL_WIDTH_PX = {
-      project: 140, item: 160, vendor: 140,
+      project: 120, item: 150, vendor: 120,
       custDue: 120, poDue: 120, reqDue: 120, availDue: 120,
-      status: 460, note: 220
+      status: 220, note: 190
     };
 
     const qs = (id)=>document.getElementById(id);
 
     function setTodayBadge(){
-      const d = new Date(); // 사용 기기 로컬(한국) 기준
+      const d = new Date();
       const y = d.getFullYear();
       const m = String(d.getMonth()+1).padStart(2,"0");
       const day = String(d.getDate()).padStart(2,"0");
@@ -854,8 +879,8 @@
       sel.style.marginTop="10px";
       sel.style.padding="10px";
       sel.style.borderRadius="12px";
-      sel.style.border="1px solid rgba(255,255,255,0.18)";
-      sel.style.background="rgba(255,255,255,0.06)";
+      sel.style.border="1px solid rgba(15,23,42,0.18)";
+      sel.style.background="rgba(255,255,255,0.85)";
       sel.style.color="var(--text)";
       for (let i=1;i<=n;i++){
         const opt = document.createElement("option");
@@ -995,7 +1020,7 @@
 
     async function captureFullPNG(){
       const area = qs("captureArea");
-      const canvas = await html2canvas(area, {scale: 2, backgroundColor:"#ffffff"});
+      const canvas = await html2canvas(area, {scale: 2, backgroundColor: null});
       return new Promise(res=>canvas.toBlob(res,"image/png"));
     }
 
@@ -1016,10 +1041,6 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-    }
-
-    function isMobile(){
-      return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     }
 
     function readFileAsDataUrl(file){
@@ -1154,8 +1175,8 @@
       wrap.innerHTML = `
         <div style="margin-bottom:10px;">저장 파일명 <b>${fileName}</b></div>
         <div class="small">
-          - 폴더저장 Chrome Edge 등에서 가능 OneDrive 동기화 폴더를 선택하면 OneDrive에 올라감<br/>
-          - iPad Safari는 공유시트 OneDrive 앱 선택 가능 또는 다운로드로 저장
+          - 폴더저장 Chrome/Edge 가능, OneDrive 동기화 폴더 선택 시 OneDrive 업로드<br/>
+          - iPad Safari는 공유시트 OneDrive 앱 선택 가능 또는 다운로드 저장
         </div>
       `;
 
@@ -1231,8 +1252,8 @@
         sel.style.width="100%";
         sel.style.padding="10px";
         sel.style.borderRadius="12px";
-        sel.style.border="1px solid rgba(255,255,255,0.18)";
-        sel.style.background="rgba(255,255,255,0.06)";
+        sel.style.border="1px solid rgba(15,23,42,0.18)";
+        sel.style.background="rgba(255,255,255,0.85)";
         sel.style.color="var(--text)";
         files.forEach(f=>{
           const opt = document.createElement("option");
@@ -1297,8 +1318,8 @@
     }
 
     function init(){
-      setTodayBadge();                 // ✅ 오른쪽 상단 날짜 세팅
-      addRow({});                      // 기본 입력행 1개
+      setTodayBadge();
+      addRow({});
 
       qs("summaryInput").addEventListener("input", markDirty);
 
