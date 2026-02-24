@@ -10,49 +10,213 @@
 
   <style>
     :root{
-      --bg:#f6f7fb;
-      --card:#ffffff;
-      --line:#d6d9e0;
-      --text:#1b1f2a;
-      --muted:#6b7280;
-      --primary:#2563eb;
-      --danger:#dc2626;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      /* Tech/AI theme */
+      --bg0:#070A12;
+      --bg1:#0B1020;
+      --glass: rgba(255,255,255,0.06);
+      --glass2: rgba(255,255,255,0.10);
+      --line: rgba(255,255,255,0.12);
+      --line2: rgba(255,255,255,0.18);
+      --text:#EAF0FF;
+      --muted:#A7B0C4;
+
+      --primary:#7C3AED;     /* violet */
+      --accent:#22D3EE;      /* cyan */
+      --good:#34D399;
+      --danger:#FB7185;
+
+      --shadow: 0 18px 50px rgba(0,0,0,0.55);
+      --shadow2: 0 10px 24px rgba(0,0,0,0.38);
+      --radius: 14px;
     }
     *{ box-sizing:border-box; }
+    html, body{ height:100%; }
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      background:var(--bg);
       color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(124,58,237,0.25), transparent 55%),
+        radial-gradient(900px 600px at 85% 15%, rgba(34,211,238,0.18), transparent 55%),
+        radial-gradient(900px 600px at 50% 105%, rgba(52,211,153,0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
     }
 
+    /* subtle tech grid */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(ellipse at 50% 10%, rgba(0,0,0,0.9), rgba(0,0,0,0.15) 55%, transparent 75%);
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* Top bar */
     header.topbar{
       position:sticky;
       top:0;
-      z-index:10;
-      background:var(--card);
+      z-index:20;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
       border-bottom:1px solid var(--line);
       padding:12px 14px;
     }
-    .title-wrap{ display:flex; flex-direction:column; gap:6px; }
-    h1.app-title{ margin:0; font-size:20px; font-weight:900; letter-spacing:-0.2px; }
-    .save-status{ font-size:12px; color:var(--muted); }
 
-    main{ padding:12px 12px 92px; }
+    .topbar-inner{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      max-width:1200px;
+      margin:0 auto;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+
+    .app-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow2);
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:0.2px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+      box-shadow: 0 0 14px rgba(34,211,238,0.55);
+    }
+
+    h1.app-title{
+      margin:0;
+      font-size:20px;
+      font-weight:950;
+      letter-spacing:-0.3px;
+      line-height:1.15;
+      text-shadow: 0 10px 20px rgba(0,0,0,0.35);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .save-status{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .save-status.need-save{
+      color:var(--danger);
+      font-weight:950;
+      text-shadow: 0 0 18px rgba(251,113,133,0.35);
+    }
+
+    /* (2) 오른쪽 상단 메타 */
+    .top-meta{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:6px;
+      min-width:220px;
+      text-align:right;
+    }
+    .meta-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      box-shadow: var(--shadow2);
+      white-space:nowrap;
+    }
+    .meta-chip strong{
+      color:var(--text);
+      font-weight:950;
+    }
+    .meta-sub{
+      font-size:12px;
+      color:rgba(234,240,255,0.70);
+      font-weight:700;
+      letter-spacing:0.2px;
+      white-space:nowrap;
+    }
+
+    main{
+      position:relative;
+      z-index:1;
+      padding:14px 12px 116px;
+      max-width:1200px;
+      margin:0 auto;
+    }
 
     .card{
-      background:var(--card);
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
       border:1px solid var(--line);
-      border-radius:12px;
-      box-shadow:var(--shadow);
-      padding:10px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:12px;
+      backdrop-filter: blur(10px);
     }
+
+    .summary-wrap{ margin-bottom:12px; }
+    .summary-title{
+      font-weight:950;
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .summary-title::before{
+      content:"";
+      width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--primary));
+      box-shadow: 0 0 16px rgba(124,58,237,0.55);
+    }
+
+    textarea.summary{
+      width:100%;
+      min-height:78px;
+      padding:12px;
+      border:1px solid var(--line2);
+      border-radius:12px;
+      outline:none;
+      resize:vertical;
+      font-size:13px;
+      line-height:1.35;
+      background: rgba(255,255,255,0.06);
+      color:var(--text);
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+    }
+    textarea.summary::placeholder{ color: rgba(234,240,255,0.45); }
 
     .table-scroll{
       overflow:auto;
-      border-radius:10px;
+      border-radius:12px;
       border:1px solid var(--line);
+      background: rgba(255,255,255,0.03);
     }
 
     table{
@@ -60,9 +224,10 @@
       border-collapse:collapse;
       min-width:1200px;
     }
+
     th, td{
-      border-bottom:1px solid var(--line);
-      border-right:1px solid var(--line);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      border-right:1px solid rgba(255,255,255,0.08);
       vertical-align:top;
     }
     th:last-child, td:last-child{ border-right:none; }
@@ -70,39 +235,40 @@
     thead th{
       position:sticky;
       top:0;
-      background:#f2f4f8;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
       z-index:2;
-      font-size:13px;
+      font-size:12.5px;
       text-align:center;
-      padding:10px 8px;
+      padding:11px 8px;
       white-space:nowrap;
+      color: rgba(234,240,255,0.92);
+      letter-spacing:0.2px;
+      backdrop-filter: blur(10px);
     }
-    tbody td{ padding:0; background:#fff; }
+
+    tbody td{ padding:0; background: transparent; }
 
     textarea.cell{
       width:100%;
-      min-height:44px;
-      padding:8px;
+      min-height:46px;
+      padding:10px;
       border:0;
       outline:none;
       resize:vertical;
       font-size:13px;
       line-height:1.35;
-      background:transparent;
+      background: transparent;
+      color: var(--text);
       white-space:pre-wrap;
       word-break:break-word;
       overflow-wrap:anywhere;
     }
-
-    /* ✅ 특정 열 가운데 정렬(프로젝트~가능납기) */
-    textarea.cell.center{
-      text-align:center;
-    }
-
-    /* ✅ 가능납기 경고(요구납기보다 늦으면 빨강) */
-    textarea.cell.avail-late{
-      color: var(--danger);
-      font-weight: 800;
+    textarea.cell::placeholder{ color: rgba(234,240,255,0.40); }
+    textarea.cell.center{ text-align:center; }
+    textarea.cell.danger{
+      color:var(--danger);
+      font-weight:950;
+      text-shadow: 0 0 16px rgba(251,113,133,0.25);
     }
 
     /* col widths */
@@ -110,16 +276,37 @@
     col.c-item{ width:160px; }
     col.c-vendor{ width:140px; }
     col.c-date{ width:120px; }
-    col.c-status{ width:460px; } /* 제작현황 넓게 */
+    col.c-status{ width:460px; }
     col.c-note{ width:220px; }
 
-    .hint{ margin-top:8px; font-size:12px; color:var(--muted); line-height:1.4; }
+    .hint{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(234,240,255,0.65);
+      line-height:1.45;
+    }
 
     /* photos */
-    .photos{ margin-top:12px; }
-    .photos-head{ display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-    .photos-title{ font-weight:900; }
-    .photos-sub{ font-size:12px; color:var(--muted); }
+    .photos{ margin-top:14px; }
+    .photos-head{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      margin-bottom:10px;
+    }
+    .photos-title{
+      font-weight:950;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .photos-title::before{
+      content:"";
+      width:10px; height:10px; border-radius:3px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      box-shadow: 0 0 16px rgba(34,211,238,0.30);
+    }
+    .photos-sub{ font-size:12px; color: rgba(234,240,255,0.65); }
 
     .photo-grid{
       display:grid;
@@ -128,72 +315,89 @@
     }
     .photo-card{
       border:1px solid var(--line);
-      border-radius:10px;
+      border-radius:12px;
       overflow:hidden;
-      background:#fff;
+      background: rgba(255,255,255,0.05);
       position:relative;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
     }
+    .photo-card.selecting::after{
+      content:"삭제하려면 사진을 탭";
+      position:absolute;
+      left:8px; right:8px; bottom:8px;
+      background: rgba(251,113,133,0.92);
+      color:#07101a;
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:10px;
+      text-align:center;
+      font-weight:950;
+    }
+
     .photo-desc{
       width:100%;
       border:0;
-      border-bottom:1px solid var(--line);
-      padding:8px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      padding:10px;
       font-size:12px;
       outline:none;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      text-align:center; /* 사진설명 가운데 */
     }
+    .photo-desc::placeholder{ color: rgba(234,240,255,0.40); }
     img.photo-img{
       width:100%;
       aspect-ratio:1/1;
       object-fit:cover;
       display:block;
-    }
-
-    /* ✅ 사진삭제 모드 표시 */
-    .photo-card.delete-mode{
-      outline: 3px solid var(--danger);
-      outline-offset: -3px;
-      cursor:pointer;
-    }
-    .photo-card.delete-mode::after{
-      content: "탭하면 삭제";
-      position:absolute;
-      top:8px; right:8px;
-      background: rgba(220,38,38,0.92);
-      color:#fff;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:900;
+      filter: saturate(1.02) contrast(1.02);
     }
 
     /* bottom bar */
     footer.bottombar{
       position:fixed;
       left:0; right:0; bottom:0;
-      background:var(--card);
-      border-top:1px solid var(--line);
+      z-index:30;
       padding:10px;
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       justify-content:center;
-      z-index:20;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+      border-top: 1px solid var(--line);
     }
+
     button.btn{
       border:1px solid var(--line);
-      background:#fff;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
       padding:9px 10px;
-      border-radius:10px;
+      border-radius:12px;
       font-size:13px;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
+      box-shadow: var(--shadow2);
+      transition: transform .06s ease, filter .12s ease, border-color .12s ease;
     }
-    button.btn:hover{ filter:brightness(0.98); }
+    button.btn:hover{ filter:brightness(1.08); border-color: rgba(255,255,255,0.22); }
     button.btn:active{ transform:translateY(1px); }
-    button.primary{ border-color:var(--primary); color:#fff; background:var(--primary); }
-    button.danger{ border-color:var(--danger); color:#fff; background:var(--danger); }
-    button.ghost-danger{ border-color:var(--danger); color:var(--danger); background:#fff; }
+
+    button.primary{
+      border-color: rgba(124,58,237,0.55);
+      background: linear-gradient(135deg, rgba(124,58,237,0.95), rgba(34,211,238,0.75));
+      color:#061018;
+      font-weight:950;
+    }
+    button.danger{
+      border-color: rgba(251,113,133,0.65);
+      background: linear-gradient(135deg, rgba(251,113,133,0.95), rgba(255,255,255,0.10));
+      color:#061018;
+      font-weight:950;
+    }
 
     /* modal */
     .modal{
@@ -206,19 +410,22 @@
     .backdrop{
       position:absolute;
       inset:0;
-      background:rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
     }
     .modal-card{
       position:relative;
       margin:24px auto;
       width:min(1100px, 94vw);
       height:min(82vh, 900px);
-      background:#fff;
-      border-radius:14px;
-      box-shadow:var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow: var(--shadow);
       overflow:hidden;
       display:flex;
       flex-direction:column;
+      backdrop-filter: blur(14px);
     }
     .modal-head{
       display:flex;
@@ -226,28 +433,50 @@
       align-items:center;
       padding:12px 14px;
       border-bottom:1px solid var(--line);
-      background:#f7f8fb;
+      background: rgba(255,255,255,0.06);
+      flex:0 0 auto;
     }
-    .modal-title{ font-weight:900; }
-    .modal-body{ padding:14px; overflow:auto; }
+    .modal-title{ font-weight:950; }
+    .modal-body{ padding:14px; overflow:auto; flex:1 1 auto; }
 
-    .capture-area{ background:#fff; padding:10px; }
-
-    /* ✅ 전체화면: 전 열이 화면에 들어오게 "강제 Fit" */
-    .fit-wrap{
-      width:100%;
-      transform-origin: top left;
+    /* 모바일 full */
+    @media (max-width: 900px){
+      .modal-card{
+        width:100vw;
+        height:100vh;
+        margin:0;
+        border-radius:0;
+      }
+      .modal-body{ padding:12px; }
+      .top-meta{ min-width: 170px; }
     }
-    /* 캡쳐 품질을 위해 스케일은 JS에서 계산 적용 */
 
-    .full-title{ font-size:18px; font-weight:900; margin-bottom:6px; }
-    .full-meta{ font-size:12px; color:var(--muted); margin-bottom:10px; }
+    .capture-area{
+      background:#ffffff;
+      padding:10px;
+      color:#0b1220;
+      border-radius:12px;
+    }
+    .full-title{ font-size:18px; font-weight:950; margin-bottom:6px; }
+    .full-meta{ font-size:12px; color:#4b5563; margin-bottom:10px; }
+
+    .full-summary-title{ font-weight:950; margin:10px 0 6px; }
+    .full-summary{
+      border:1px solid #cfd3dc;
+      border-radius:10px;
+      padding:10px;
+      font-size:12px;
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      background:#fff;
+    }
 
     table.full-table{
       width:100%;
       border-collapse:collapse;
       font-size:12px;
-      table-layout: fixed; /* ✅ 열을 화면폭에 맞게 강제 분배 */
+      table-layout:fixed;
     }
     table.full-table th, table.full-table td{
       border:1px solid #cfd3dc;
@@ -257,6 +486,8 @@
       word-break:break-word;
       overflow-wrap:anywhere;
     }
+    table.full-table th{ background:#f2f4f8; text-align:center; }
+    .full-center{ text-align:center; }
 
     .full-photos{
       margin-top:12px;
@@ -276,17 +507,20 @@
     .dialog-card{
       position:relative;
       margin:24px auto;
-      width:min(520px, 92vw);
-      background:#fff;
-      border-radius:14px;
-      box-shadow:var(--shadow);
+      width:min(560px, 92vw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow: var(--shadow);
       overflow:hidden;
+      backdrop-filter: blur(14px);
+      color: var(--text);
     }
     .dialog-title{
       padding:12px 14px;
-      font-weight:900;
+      font-weight:950;
       border-bottom:1px solid var(--line);
-      background:#f7f8fb;
+      background: rgba(255,255,255,0.06);
     }
     .dialog-body{ padding:14px; font-size:13px; line-height:1.4; }
     .dialog-actions{
@@ -295,30 +529,45 @@
       gap:8px;
       justify-content:flex-end;
       border-top:1px solid var(--line);
-      background:#fafbff;
+      background: rgba(255,255,255,0.04);
       flex-wrap:wrap;
     }
-    .small{ font-size:12px; color:var(--muted); }
+    .small{ font-size:12px; color: rgba(234,240,255,0.70); }
 
     @media (max-width: 520px){
       .photo-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .full-photos{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
       footer.bottombar{ gap:6px; }
       button.btn{ padding:9px 9px; }
+      .app-badge{ display:none; }
     }
   </style>
 </head>
 
 <body>
   <header class="topbar">
-    <div class="title-wrap">
-      <h1 class="app-title">협력사 공정관리 협의록 앱</h1>
-      <div class="save-status" id="saveStatus">not saved_ 저장하세요</div>
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="app-badge"><span class="dot"></span> Process Control · Tech Ops · AI-ready</div>
+        <h1 class="app-title">협력사 공정관리 협의록 앱</h1>
+        <div class="save-status" id="saveStatus">not saved_ 저장하세요</div>
+      </div>
+
+      <!-- (2) 오른쪽 상단 날짜 + 개발자 -->
+      <div class="top-meta">
+        <div class="meta-chip"><strong id="todayText">YYYY-MM-DD</strong> <span style="opacity:.8;">Today</span></div>
+        <div class="meta-sub">App Developed by <span style="font-weight:950; color:var(--text);">Jackson.Lee</span></div>
+      </div>
     </div>
   </header>
 
   <main>
-    <section class="card">
+    <!-- Summary 입력칸 -->
+    <section class="card summary-wrap">
+      <div class="summary-title">협의결과 Summary</div>
+      <textarea class="summary" id="summaryInput" placeholder="여기에 협의결과 Summary를 입력해 (Enter 줄바꿈 가능)"></textarea>
+    </section>
+
+    <section class="card" style="margin-top:12px;">
       <div class="table-scroll">
         <table id="dataTable">
           <colgroup>
@@ -350,16 +599,16 @@
       </div>
 
       <div class="hint">
-        - 프로젝트~가능납기 열은 자동 가운데 정렬<br/>
-        - 가능납기 &gt; 요구납기면 가능납기 글자색이 빨간색으로 바뀜<br/>
-        - 전체화면은 가로 스크롤 없이 전 열을 한 화면에 맞춰서 표시
+        - 모든 입력칸은 Enter로 줄바꿈 가능 (textarea)<br/>
+        - 제작현황 열은 넓게 + 줄바꿈/짤림 없음<br/>
+        - 저장 폴더저장(가능 브라우저) / 공유시트 / 다운로드 지원
       </div>
     </section>
 
     <section class="card photos">
       <div class="photos-head">
         <div class="photos-title">첨부 사진</div>
-        <div class="photos-sub">“사진삭제”를 누르면 삭제모드가 켜지고, 사진을 탭하면 즉시 삭제</div>
+        <div class="photos-sub">모바일에서 “사진추가”로 선택하면 4열 그리드로 정사각형 배치</div>
       </div>
       <div class="photo-grid" id="photoGrid"></div>
       <input id="photoInput" type="file" accept="image/*" multiple hidden />
@@ -376,7 +625,7 @@
     <button class="btn primary" id="btnSave">저장</button>
     <button class="btn" id="btnLoad">불러오기</button>
     <button class="btn" id="btnPhoto">사진추가</button>
-    <button class="btn ghost-danger" id="btnPhotoDel">사진삭제</button>
+    <button class="btn" id="btnPhotoDel">사진삭제</button>
     <button class="btn danger" id="btnMail">메일송부</button>
   </footer>
 
@@ -395,12 +644,11 @@
           <div class="full-title">협력사 공정관리 협의록</div>
           <div class="full-meta" id="fullMeta"></div>
 
-          <!-- ✅ fit wrapper -->
-          <div class="fit-wrap" id="fitWrap">
-            <table class="full-table" id="fullTable"></table>
-            <div class="full-photos" id="fullPhotos"></div>
-          </div>
+          <div class="full-summary-title">협의결과 Summary</div>
+          <div class="full-summary" id="fullSummary"></div>
 
+          <table class="full-table" id="fullTable"></table>
+          <div class="full-photos" id="fullPhotos"></div>
         </div>
       </div>
     </div>
@@ -418,27 +666,45 @@
 
   <script>
     const APP = {
-      dueCols: new Set(["custDue","poDue","reqDue"]), // 사용자 선택 납기열
+      dueCols: new Set(["custDue","poDue","reqDue"]),
       dirty: true,
       savedFileName: "",
-      dirHandle: null,      // 마지막 선택 폴더
-      photos: [],            // {desc:"", dataUrl:""}
-      photoDeleteMode: false // ✅ 사진삭제 모드
+      dirHandle: null,
+      photos: [], // {desc:"", dataUrl:""}
+      photoDeleteMode: false,
+      summary: ""
     };
 
     const COLS = [
-      { key: "project", label: "프로젝트", center:true },
-      { key: "item", label: "품목명", center:true },
-      { key: "vendor", label: "업체명", center:true },
-      { key: "custDue", label: "고객납기", type: "due", center:true },
-      { key: "poDue", label: "PO납기", type: "due", center:true },
-      { key: "reqDue", label: "요구납기", type: "due", center:true },
-      { key: "availDue", label: "가능납기", center:true }, // ✅ 경고 판단 대상
+      { key: "project", label: "프로젝트" },
+      { key: "item", label: "품목명" },
+      { key: "vendor", label: "업체명" },
+      { key: "custDue", label: "고객납기", type: "due" },
+      { key: "poDue", label: "PO납기", type: "due" },
+      { key: "reqDue", label: "요구납기", type: "due" },
+      { key: "availDue", label: "가능납기" },
       { key: "status", label: "제작현황" },
       { key: "note", label: "비고" },
     ];
 
+    const CENTER_KEYS_MAIN = new Set(["project","item","vendor","custDue","poDue","reqDue","availDue"]);
+    const CENTER_KEYS_FULL = new Set(["project","item","vendor","custDue","poDue","reqDue","availDue"]); // 제작현황/비고 제외
+
+    const COL_WIDTH_PX = {
+      project: 140, item: 160, vendor: 140,
+      custDue: 120, poDue: 120, reqDue: 120, availDue: 120,
+      status: 460, note: 220
+    };
+
     const qs = (id)=>document.getElementById(id);
+
+    function setTodayBadge(){
+      const d = new Date(); // 사용 기기 로컬(한국) 기준
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      qs("todayText").textContent = `${y}-${m}-${day}`;
+    }
 
     function todayPrefix(){
       const d = new Date();
@@ -448,16 +714,11 @@
       return `${y}-${m}-${day}_`;
     }
 
-    function normalizeJsonName(inputName){
-      const base = (inputName || "").trim();
-      if (!base) return todayPrefix(); // 최소 기본값
-      // 사용자가 .json을 넣어도 제거하고 마지막에 강제로 붙임
-      const noExt = base.replace(/\.json$/i, "");
-      return noExt + ".json";
-    }
-
     function setSaveStatus(){
       const el = qs("saveStatus");
+      const needSave = (!APP.savedFileName) || APP.dirty;
+      el.classList.toggle("need-save", needSave);
+
       if (!APP.savedFileName){
         el.textContent = "not saved_ 저장하세요";
         return;
@@ -472,68 +733,60 @@
       setSaveStatus();
     }
 
-    /* ===== 날짜 비교(요구납기 vs 가능납기) ===== */
-    function parseDateLoose(s){
-      if (!s) return null;
-      const t = String(s).trim();
-      // YYYY-MM-DD만 확실히 처리
-      const m = t.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    function parseYMD(s){
+      const t = String(s||"").trim();
+      const m = t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
       if (!m) return null;
-      const y = Number(m[1]), mo = Number(m[2])-1, d = Number(m[3]);
+      const y = +m[1], mo = +m[2]-1, d = +m[3];
       const dt = new Date(y, mo, d);
-      if (Number.isNaN(dt.getTime())) return null;
+      if (dt.getFullYear()!==y || dt.getMonth()!==mo || dt.getDate()!==d) return null;
+      dt.setHours(0,0,0,0);
       return dt;
     }
 
-    function applyAvailDueColor(tr){
-      // COLS index: reqDue=5, availDue=6
-      const tas = Array.from(tr.querySelectorAll("td textarea"));
-      const req = tas[5]?.value || "";
-      const avail = tas[6]?.value || "";
-      const reqDt = parseDateLoose(req);
-      const availDt = parseDateLoose(avail);
+    function applyDueColoringInRow(tr){
+      const getTa = (key)=>{
+        const idx = COLS.findIndex(c=>c.key===key);
+        return tr.querySelectorAll("textarea")[idx] || null;
+      };
+      const reqTa = getTa("reqDue");
+      const availTa = getTa("availDue");
+      if (!reqTa || !availTa) return;
 
-      const availTa = tas[6];
-      if (!availTa) return;
+      const req = parseYMD(reqTa.value);
+      const av  = parseYMD(availTa.value);
 
-      availTa.classList.remove("avail-late");
-      if (reqDt && availDt && availDt.getTime() > reqDt.getTime()){
-        availTa.classList.add("avail-late");
+      availTa.classList.remove("danger");
+      if (req && av && av.getTime() > req.getTime()){
+        availTa.classList.add("danger");
       }
     }
 
-    function makeCell(val="", colIndex=0){
+    function makeCell(key, val=""){
       const ta = document.createElement("textarea");
       ta.className = "cell";
-
-      // ✅ 가운데 정렬 적용(프로젝트~가능납기)
-      const col = COLS[colIndex];
-      if (col?.center) ta.classList.add("center");
-
+      if (CENTER_KEYS_MAIN.has(key)) ta.classList.add("center");
       ta.value = val;
 
       ta.addEventListener("input", ()=>{
         markDirty();
-        // ✅ 요구납기/가능납기 변경 시 빨강 판단
         const tr = ta.closest("tr");
-        if (tr) applyAvailDueColor(tr);
+        if (tr && (key==="reqDue" || key==="availDue")){
+          applyDueColoringInRow(tr);
+        }
       });
-
       return ta;
     }
 
     function addRow(rowData={}){
       const tr = document.createElement("tr");
-      COLS.forEach((c, idx)=>{
+      for (const c of COLS){
         const td = document.createElement("td");
-        td.appendChild(makeCell(rowData[c.key] ?? "", idx));
+        td.appendChild(makeCell(c.key, rowData[c.key] ?? ""));
         tr.appendChild(td);
-      });
+      }
       qs("tbody").appendChild(tr);
-
-      // 초기 색상 적용
-      applyAvailDueColor(tr);
-
+      applyDueColoringInRow(tr);
       markDirty();
     }
 
@@ -600,6 +853,10 @@
       sel.style.width="100%";
       sel.style.marginTop="10px";
       sel.style.padding="10px";
+      sel.style.borderRadius="12px";
+      sel.style.border="1px solid rgba(255,255,255,0.18)";
+      sel.style.background="rgba(255,255,255,0.06)";
+      sel.style.color="var(--text)";
       for (let i=1;i<=n;i++){
         const opt = document.createElement("option");
         opt.value = String(i);
@@ -670,6 +927,20 @@
         return true;
       });
 
+      const totalPx = visibleCols.reduce((sum,c)=>sum + (COL_WIDTH_PX[c.key] || 120), 0);
+      const colPct = (key)=>{
+        const px = (COL_WIDTH_PX[key] || 120);
+        return (px / totalPx * 100);
+      };
+
+      const colgroup = document.createElement("colgroup");
+      visibleCols.forEach(c=>{
+        const col = document.createElement("col");
+        col.style.width = colPct(c.key).toFixed(2) + "%";
+        colgroup.appendChild(col);
+      });
+      fullTable.appendChild(colgroup);
+
       const thead = document.createElement("thead");
       const trh = document.createElement("tr");
       visibleCols.forEach(c=>{
@@ -685,15 +956,7 @@
         visibleCols.forEach(c=>{
           const td = document.createElement("td");
           td.textContent = r[c.key] ?? "";
-          // ✅ 전체화면에서도 가능납기 경고 표시(텍스트 빨강)
-          if (c.key === "availDue"){
-            const reqDt = parseDateLoose(r["reqDue"]);
-            const availDt = parseDateLoose(r["availDue"]);
-            if (reqDt && availDt && availDt.getTime() > reqDt.getTime()){
-              td.style.color = "var(--danger)";
-              td.style.fontWeight = "900";
-            }
-          }
+          if (CENTER_KEYS_FULL.has(c.key)) td.classList.add("full-center");
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -714,35 +977,15 @@
       });
     }
 
-    function applyFitToScreen(){
-      // ✅ fullTable+photos 영역이 가로로 넘치면 scale 다운해서 "전 열이 화면에 보이게"
-      const fit = qs("fitWrap");
-      const modalBody = document.querySelector("#fullModal .modal-body");
-      if (!fit || !modalBody) return;
-
-      // 스케일 초기화 후 실제 폭 측정
-      fit.style.transform = "scale(1)";
-
-      const availableW = modalBody.clientWidth - 8; // 여유
-      const contentW = fit.scrollWidth;
-
-      if (contentW <= 0) return;
-
-      const scale = Math.min(1, availableW / contentW);
-      fit.style.transform = `scale(${scale})`;
-    }
-
     function openFullModal(){
       buildFullTable();
       buildFullPhotos();
+
+      qs("fullSummary").textContent = (qs("summaryInput").value || "").trim() || "(Summary 없음)";
       qs("fullMeta").textContent = `생성일시 ${new Date().toLocaleString("ko-KR")}`;
+
       qs("fullModal").classList.add("show");
       qs("fullModal").setAttribute("aria-hidden","false");
-
-      // 렌더링 후 fit 적용
-      requestAnimationFrame(()=>{
-        applyFitToScreen();
-      });
     }
 
     function closeFullModal(){
@@ -751,8 +994,6 @@
     }
 
     async function captureFullPNG(){
-      // 캡쳐는 scale(1)로 찍고, 캡쳐 전에 fit을 해제하면 스크롤폭이 커질 수 있음
-      // → fit 유지 상태로 캡쳐(“화면에 보이는 그대로”)
       const area = qs("captureArea");
       const canvas = await html2canvas(area, {scale: 2, backgroundColor:"#ffffff"});
       return new Promise(res=>canvas.toBlob(res,"image/png"));
@@ -818,9 +1059,7 @@
       APP.photos.forEach((p, idx)=>{
         const card = document.createElement("div");
         card.className = "photo-card";
-
-        // ✅ 삭제모드면 강조
-        if (APP.photoDeleteMode) card.classList.add("delete-mode");
+        if (APP.photoDeleteMode) card.classList.add("selecting");
 
         const desc = document.createElement("input");
         desc.className = "photo-desc";
@@ -835,20 +1074,15 @@
         img.className = "photo-img";
         img.src = p.dataUrl;
 
-        card.appendChild(desc);
-        card.appendChild(img);
-
-        // ✅ 삭제모드: 탭 즉시 삭제(팝업 없음)
-        card.addEventListener("click", (e)=>{
+        card.addEventListener("click", ()=>{
           if (!APP.photoDeleteMode) return;
-          // 입력 중이면 무시
-          if (e.target && (e.target.tagName === "INPUT")) return;
-
           APP.photos.splice(idx, 1);
           renderPhotos();
           markDirty();
         });
 
+        card.appendChild(desc);
+        card.appendChild(img);
         grid.appendChild(card);
       });
     }
@@ -868,10 +1102,11 @@
 
     function makePayload(){
       return {
-        version: 1,
+        version: 2,
         savedAt: new Date().toISOString(),
         savedFileName: APP.savedFileName || "",
         dueCols: Array.from(APP.dueCols),
+        summary: qs("summaryInput").value || "",
         rows: getTableData(),
         photos: APP.photos
       };
@@ -881,15 +1116,15 @@
       if (!payload) return;
       APP.dueCols = new Set(payload.dueCols || ["custDue","poDue","reqDue"]);
       APP.photos = payload.photos || [];
-      APP.photoDeleteMode = false;
       renderPhotos();
+      qs("summaryInput").value = payload.summary || "";
       setTableData(payload.rows || []);
       APP.savedFileName = payload.savedFileName || APP.savedFileName || "";
       APP.dirty = false;
       setSaveStatus();
     }
 
-    function downloadJson(name, obj){
+    function downloadFile(name, obj){
       const blob = new Blob([JSON.stringify(obj, null, 2)], {type:"application/json"});
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -901,75 +1136,74 @@
       URL.revokeObjectURL(url);
     }
 
-    async function pickFolderAlways(){
-      // ✅ 저장 시 경로 선택 가능(폴더 저장 지원 브라우저)
-      if (!window.showDirectoryPicker) return null;
-      return await window.showDirectoryPicker({mode:"readwrite"});
+    async function saveToDirectory(dirHandle, fileName){
+      const fileHandle = await dirHandle.getFileHandle(fileName, {create:true});
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify(makePayload(), null, 2));
+      await writable.close();
     }
 
     async function save(){
-      const suggestedBase = todayPrefix();  // ✅ 오늘날짜+"_" 만
-      const currentBase = (APP.savedFileName || "").replace(/\.json$/i,"");
-      const defaultBase = currentBase || suggestedBase;
+      const base = (prompt("저장 파일명 입력 (확장자 자동 .json)", (APP.savedFileName ? APP.savedFileName.replace(/\.json$/i,"") : todayPrefix())) || "").trim()
+                  || (APP.savedFileName ? APP.savedFileName.replace(/\.json$/i,"") : todayPrefix());
 
-      // ✅ 사용자 입력은 확장자 없이 받게 유도(고정)
-      const inputBase = prompt("저장 파일명 입력 (확장자 json 고정)", defaultBase) || defaultBase;
-      const fileName = normalizeJsonName(inputBase); // ✅ 강제 .json
+      const fileName = base.endsWith(".json") ? base : (base + ".json");
+      APP.savedFileName = fileName;
 
-      // ✅ 경로 선택 옵션 제공(지원 브라우저)
+      const wrap = document.createElement("div");
+      wrap.innerHTML = `
+        <div style="margin-bottom:10px;">저장 파일명 <b>${fileName}</b></div>
+        <div class="small">
+          - 폴더저장 Chrome Edge 등에서 가능 OneDrive 동기화 폴더를 선택하면 OneDrive에 올라감<br/>
+          - iPad Safari는 공유시트 OneDrive 앱 선택 가능 또는 다운로드로 저장
+        </div>
+      `;
+
+      const actions = [];
+
       if (window.showDirectoryPicker){
-        const wrap = document.createElement("div");
-        wrap.innerHTML = `
-          <div style="margin-bottom:10px;">저장 경로를 선택할 수 있어.</div>
-          <div class="small">- "현재 경로 저장"은 이전에 선택한 폴더에 저장</div>
-          <div class="small">- "경로 변경"은 새 폴더를 선택</div>
-        `;
-
-        openDialog({
-          title:"저장",
-          bodyNode: wrap,
-          actions:[
-            makeBtn("취소","", closeDialog),
-            makeBtn("현재 경로 저장","primary", async ()=>{
-              closeDialog();
-              try{
-                if (!APP.dirHandle) APP.dirHandle = await pickFolderAlways();
-                const fileHandle = await APP.dirHandle.getFileHandle(fileName, {create:true});
-                const writable = await fileHandle.createWritable();
-                APP.savedFileName = fileName;
-                await writable.write(JSON.stringify(makePayload(), null, 2));
-                await writable.close();
-                APP.dirty = false;
-                setSaveStatus();
-              } catch(e){}
-            }),
-            makeBtn("경로 변경","", async ()=>{
-              closeDialog();
-              try{
-                APP.dirHandle = await pickFolderAlways();
-                const fileHandle = await APP.dirHandle.getFileHandle(fileName, {create:true});
-                const writable = await fileHandle.createWritable();
-                APP.savedFileName = fileName;
-                await writable.write(JSON.stringify(makePayload(), null, 2));
-                await writable.close();
-                APP.dirty = false;
-                setSaveStatus();
-              } catch(e){}
-            }),
-          ]
-        });
-        return;
+        actions.push(makeBtn("폴더 선택 저장","primary", async ()=>{
+          try{
+            const dir = await window.showDirectoryPicker({mode:"readwrite"});
+            APP.dirHandle = dir;
+            await saveToDirectory(dir, fileName);
+            APP.dirty = false;
+            setSaveStatus();
+            closeDialog();
+          }catch(e){}
+        }));
       }
 
-      // ✅ iPad Safari: 다운로드(경로는 OS가 처리)
-      APP.savedFileName = fileName;
-      downloadJson(fileName, makePayload());
-      APP.dirty = false;
-      setSaveStatus();
+      actions.push(makeBtn("공유(OneDrive 등)","", async ()=>{
+        try{
+          const blob = new Blob([JSON.stringify(makePayload(), null, 2)], {type:"application/json"});
+          const file = new File([blob], fileName, {type:"application/json"});
+          if (navigator.canShare && navigator.canShare({files:[file]})){
+            await navigator.share({files:[file], title:"협의록 JSON", text:"협의록 저장/공유"});
+            APP.dirty = false;
+            setSaveStatus();
+            closeDialog();
+            return;
+          }
+          downloadFile(fileName, makePayload());
+          APP.dirty = false;
+          setSaveStatus();
+          closeDialog();
+        }catch(e){}
+      }));
+
+      actions.push(makeBtn("다운로드","", ()=>{
+        downloadFile(fileName, makePayload());
+        APP.dirty = false;
+        setSaveStatus();
+        closeDialog();
+      }));
+
+      actions.push(makeBtn("취소","", closeDialog));
+      openDialog({title:"저장", bodyNode:wrap, actions});
     }
 
     async function load(){
-      // 데스크탑: 폴더에서 json 리스트 보여주기
       if (window.showDirectoryPicker){
         const dir = await window.showDirectoryPicker({mode:"readwrite"});
         APP.dirHandle = dir;
@@ -996,6 +1230,10 @@
         const sel = document.createElement("select");
         sel.style.width="100%";
         sel.style.padding="10px";
+        sel.style.borderRadius="12px";
+        sel.style.border="1px solid rgba(255,255,255,0.18)";
+        sel.style.background="rgba(255,255,255,0.06)";
+        sel.style.color="var(--text)";
         files.forEach(f=>{
           const opt = document.createElement("option");
           opt.value = f.name;
@@ -1024,7 +1262,6 @@
         return;
       }
 
-      // iPad: 파일 선택 업로드
       const input = document.createElement("input");
       input.type="file";
       input.accept="application/json";
@@ -1059,20 +1296,12 @@
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
     }
 
-    function togglePhotoDeleteMode(){
-      APP.photoDeleteMode = !APP.photoDeleteMode;
-      const btn = qs("btnPhotoDel");
-      btn.textContent = APP.photoDeleteMode ? "사진삭제(ON)" : "사진삭제";
-      btn.classList.toggle("danger", APP.photoDeleteMode);
-      btn.classList.toggle("ghost-danger", !APP.photoDeleteMode);
-      renderPhotos();
-    }
-
     function init(){
-      // 기본 입력행 1개
-      addRow({});
+      setTodayBadge();                 // ✅ 오른쪽 상단 날짜 세팅
+      addRow({});                      // 기본 입력행 1개
 
-      // 버튼
+      qs("summaryInput").addEventListener("input", markDirty);
+
       qs("btnAddRow").addEventListener("click", ()=>addRow({}));
       qs("btnDelRow").addEventListener("click", showDeleteRowDialog);
       qs("btnUser").addEventListener("click", showUserDueDialog);
@@ -1080,40 +1309,25 @@
       qs("btnShare").addEventListener("click", shareCapture);
       qs("btnSave").addEventListener("click", save);
       qs("btnLoad").addEventListener("click", load);
+      qs("btnMail").addEventListener("click", sendMail);
 
-      // 사진
-      qs("btnPhoto").addEventListener("click", ()=>{
-        if (!isMobile()){
-          openDialog({
-            title:"사진추가",
-            bodyNode:`<div>사진추가는 모바일(iPad/iPhone)에서 쓰는 걸 추천해. 데스크탑도 가능은 해.</div>`,
-            actions:[ makeBtn("확인","primary",closeDialog) ]
-          });
-        }
-        qs("photoInput").click();
-      });
+      qs("btnPhoto").addEventListener("click", ()=>qs("photoInput").click());
       qs("photoInput").addEventListener("change", (e)=>{
         handlePhotoFiles(e.target.files);
         e.target.value = "";
       });
 
-      // ✅ 사진삭제
-      qs("btnPhotoDel").addEventListener("click", togglePhotoDeleteMode);
+      qs("btnPhotoDel").addEventListener("click", ()=>{
+        APP.photoDeleteMode = !APP.photoDeleteMode;
+        qs("btnPhotoDel").classList.toggle("danger", APP.photoDeleteMode);
+        qs("btnPhotoDel").textContent = APP.photoDeleteMode ? "사진삭제(선택)" : "사진삭제";
+        renderPhotos();
+      });
 
-      // ✅ 메일송부(사진삭제 오른쪽)
-      qs("btnMail").addEventListener("click", sendMail);
-
-      // 모달 닫기
       qs("btnCloseFull").addEventListener("click", closeFullModal);
       qs("fullBackdrop").addEventListener("click", closeFullModal);
       qs("dialogBackdrop").addEventListener("click", closeDialog);
 
-      // 전체화면 리사이즈 시 fit 재계산
-      window.addEventListener("resize", ()=>{
-        if (qs("fullModal").classList.contains("show")) applyFitToScreen();
-      });
-
-      // 초기 상태
       APP.dirty = true;
       setSaveStatus();
     }
