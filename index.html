@@ -653,7 +653,7 @@
     <button class="btn danger" id="btnMail">메일송부</button>
   </footer>
 
-  <!-- 전체화면 모달 -->
+  <!-- 전체화면 모달 (기존 유지: 캡쳐/공유용) -->
   <div class="modal" id="fullModal" aria-hidden="true">
     <div class="backdrop" id="fullBackdrop"></div>
     <div class="modal-card">
@@ -1018,46 +1018,6 @@
       qs("fullModal").setAttribute("aria-hidden","true");
     }
 
-    /* ============================
-       ✅ [요청 반영] 전체화면 버튼:
-       현재 페이지 "그대로" 신규 팝업창(최대 크기)으로 띄우기
-       (레이아웃/구성 변경 없음)
-    ============================ */
-    function openFullPopup(){
-      const w = window.open(
-        "",
-        "_blank",
-        `popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${screen.availWidth},height=${screen.availHeight},left=0,top=0`
-      );
-      if (!w) return; // 팝업 차단 시 브라우저 설정 필요
-
-      // 현재 DOM을 그대로 복제하되, 입력값(value)을 HTML에 반영(textarea는 textContent로)
-      const clone = document.documentElement.cloneNode(true);
-
-      const srcTextareas = Array.from(document.querySelectorAll("textarea"));
-      const dstTextareas = Array.from(clone.querySelectorAll("textarea"));
-      for (let i=0;i<Math.min(srcTextareas.length, dstTextareas.length);i++){
-        dstTextareas[i].textContent = srcTextareas[i].value ?? "";
-      }
-
-      const srcInputs = Array.from(document.querySelectorAll("input"));
-      const dstInputs = Array.from(clone.querySelectorAll("input"));
-      for (let i=0;i<Math.min(srcInputs.length, dstInputs.length);i++){
-        const s = srcInputs[i], d = dstInputs[i];
-        if (s.type === "checkbox" || s.type === "radio"){
-          if (s.checked) d.setAttribute("checked","checked");
-          else d.removeAttribute("checked");
-        } else if (s.type !== "file"){
-          d.setAttribute("value", s.value ?? "");
-        }
-      }
-
-      w.document.open();
-      w.document.write("<!doctype html>\n" + clone.outerHTML);
-      w.document.close();
-      try{ w.focus(); }catch(e){}
-    }
-
     async function captureFullPNG(){
       const area = qs("captureArea");
       const canvas = await html2canvas(area, {scale: 2, backgroundColor: null});
@@ -1081,6 +1041,37 @@
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
+    }
+
+    /* =========================================================
+       ✅ [요청사항 반영] 공유/저장/메일송부 -> "전체화면(팝업)에서 보이는 화면(현재 페이지 전체)" 캡쳐
+       - 팝업은 현재 페이지 그대로 복제이므로, 캡쳐 대상 = 현재 페이지 전체(document.body)
+       - 다이얼로그가 떠있는 상태에서 캡쳐되면 다이얼로그까지 찍히므로:
+         저장 액션에서는 closeDialog() 후 캡쳐 수행
+    ========================================================= */
+    async function capturePopupViewPNG(){
+      const root = document.body;
+      const de = document.documentElement;
+
+      // 현재 스크롤 위치 보정(전체 페이지 캡쳐)
+      const scrollY = window.scrollY || de.scrollTop || 0;
+      const scrollX = window.scrollX || de.scrollLeft || 0;
+
+      const canvas = await html2canvas(root, {
+        scale: 2,
+        backgroundColor: null,
+        windowWidth: Math.max(de.scrollWidth, de.clientWidth),
+        windowHeight: Math.max(de.scrollHeight, de.clientHeight),
+        scrollX: -scrollX,
+        scrollY: -scrollY
+      });
+
+      return new Promise(res=>canvas.toBlob(res,"image/png"));
+    }
+
+    async function sharePopupViewCapture(){
+      const blob = await capturePopupViewPNG();
+      await shareOrDownload(blob);
     }
 
     function readFileAsDataUrl(file){
@@ -1231,6 +1222,9 @@
             APP.dirty = false;
             setSaveStatus();
             closeDialog();
+
+            // ✅ 저장 후: 전체화면(팝업 화면과 동일) 캡쳐 저장/공유
+            await sharePopupViewCapture();
           }catch(e){}
         }));
       }
@@ -1244,20 +1238,29 @@
             APP.dirty = false;
             setSaveStatus();
             closeDialog();
+
+            // ✅ 저장/공유 후: 전체화면(팝업 화면과 동일) 캡쳐 저장/공유
+            await sharePopupViewCapture();
             return;
           }
           downloadFile(fileName, makePayload());
           APP.dirty = false;
           setSaveStatus();
           closeDialog();
+
+          // ✅ 다운로드 후: 전체화면(팝업 화면과 동일) 캡쳐 저장/공유
+          await sharePopupViewCapture();
         }catch(e){}
       }));
 
-      actions.push(makeBtn("다운로드","", ()=>{
+      actions.push(makeBtn("다운로드","", async ()=>{
         downloadFile(fileName, makePayload());
         APP.dirty = false;
         setSaveStatus();
         closeDialog();
+
+        // ✅ 다운로드 후: 전체화면(팝업 화면과 동일) 캡쳐 저장/공유
+        await sharePopupViewCapture();
       }));
 
       actions.push(makeBtn("취소","", closeDialog));
@@ -1338,13 +1341,13 @@
     }
 
     async function shareCapture(){
-      if (!qs("fullModal").classList.contains("show")) openFullModal();
-      const blob = await captureFullPNG();
-      await shareOrDownload(blob);
+      // ✅ 공유 버튼은 "팝업에서 보이는 전체 화면" = 현재 페이지 전체 캡쳐로 처리
+      await sharePopupViewCapture();
     }
 
     async function sendMail(){
-      await shareCapture();
+      // ✅ 메일송부 버튼도 동일하게 전체 화면 캡쳐를 먼저 생성(공유/저장)
+      await sharePopupViewCapture();
 
       const to = "dokil.lee@doosan.com";
       const subject = encodeURIComponent(`협력사 공정관리 협의록 (${todayPrefix().slice(0,10)})`);
@@ -1357,9 +1360,43 @@
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
     }
 
+    /* =========================================================
+       ✅ [전체화면 버튼] 현재 페이지 그대로 신규 팝업 전체화면 (기존 유지)
+    ========================================================= */
+    function openFullPopup(){
+      const payload = makePayload();
+
+      const w = window.open("", "_blank", "popup=yes,noopener,noreferrer");
+      if (!w) return;
+
+      let html = document.documentElement.outerHTML;
+
+      const safeJson = JSON.stringify(payload)
+        .replace(/</g, "\\u003c")
+        .replace(/-->/g, "--\\u003e");
+
+      const inject = `<script>window.__INIT_PAYLOAD = ${safeJson};<\/script>`;
+      html = html.replace(/<body([^>]*)>/i, (m, attrs)=>`<body${attrs}>${inject}`);
+
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+
+      try{
+        w.focus();
+        w.moveTo(0,0);
+        w.resizeTo(screen.availWidth, screen.availHeight);
+      }catch(e){}
+    }
+
     function init(){
       setTodayBadge();
-      if (getRowCount()===0) addRow({});  // ✅ 팝업(복제)에서 중복 행 추가 방지
+
+      if (window.__INIT_PAYLOAD){
+        loadPayload(window.__INIT_PAYLOAD);
+      }else{
+        addRow({});
+      }
 
       qs("summaryInput").addEventListener("input", markDirty);
 
@@ -1367,8 +1404,10 @@
       qs("btnDelRow").addEventListener("click", showDeleteRowDialog);
       qs("btnUser").addEventListener("click", showUserDueDialog);
 
-      qs("btnFull").addEventListener("click", openFullPopup); // ✅ [수정] 전체화면 버튼 = 팝업으로 그대로 띄우기
+      // 전체화면 -> 팝업
+      qs("btnFull").addEventListener("click", openFullPopup);
 
+      // ✅ [요청사항 반영] 공유/저장/메일송부 -> 팝업에서 보이는 화면(=현재 페이지 전체) 기준
       qs("btnShare").addEventListener("click", shareCapture);
       qs("btnSave").addEventListener("click", save);
       qs("btnLoad").addEventListener("click", load);
