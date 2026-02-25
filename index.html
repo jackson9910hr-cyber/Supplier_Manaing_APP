@@ -1361,7 +1361,9 @@
     }
 
     /* =========================================================
-       ✅ [전체화면 버튼] 현재 페이지 그대로 신규 팝업 전체화면 (기존 유지)
+       ✅ [요청사항 반영] 전체화면 버튼 -> 팝업이 뜨고, 현재 작성된 전체 내용(요약/표/사진/설정)을 그대로 표시
+       - 현재 페이지 DOM 그대로 복제 + window.__INIT_PAYLOAD 주입
+       - 팝업에서 init() 시 payload 로드하여 동일 상태 재현
     ========================================================= */
     function openFullPopup(){
       const payload = makePayload();
@@ -1392,6 +1394,7 @@
     function init(){
       setTodayBadge();
 
+      // ✅ 팝업에서 넘어온 payload가 있으면 동일 상태 로드
       if (window.__INIT_PAYLOAD){
         loadPayload(window.__INIT_PAYLOAD);
       }else{
@@ -1404,10 +1407,10 @@
       qs("btnDelRow").addEventListener("click", showDeleteRowDialog);
       qs("btnUser").addEventListener("click", showUserDueDialog);
 
-      // 전체화면 -> 팝업
+      // ✅ 전체화면 -> 팝업
       qs("btnFull").addEventListener("click", openFullPopup);
 
-      // ✅ [요청사항 반영] 공유/저장/메일송부 -> 팝업에서 보이는 화면(=현재 페이지 전체) 기준
+      // 공유/저장/메일송부
       qs("btnShare").addEventListener("click", shareCapture);
       qs("btnSave").addEventListener("click", save);
       qs("btnLoad").addEventListener("click", load);
