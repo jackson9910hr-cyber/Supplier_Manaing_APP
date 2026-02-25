@@ -653,7 +653,7 @@
     <button class="btn danger" id="btnMail">메일송부</button>
   </footer>
 
-  <!-- 전체화면 모달 (기존 유지: 캡쳐/공유용) -->
+  <!-- 전체화면 모달 -->
   <div class="modal" id="fullModal" aria-hidden="true">
     <div class="backdrop" id="fullBackdrop"></div>
     <div class="modal-card">
@@ -1018,6 +1018,46 @@
       qs("fullModal").setAttribute("aria-hidden","true");
     }
 
+    /* ============================
+       ✅ [요청 반영] 전체화면 버튼:
+       현재 페이지 "그대로" 신규 팝업창(최대 크기)으로 띄우기
+       (레이아웃/구성 변경 없음)
+    ============================ */
+    function openFullPopup(){
+      const w = window.open(
+        "",
+        "_blank",
+        `popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=${screen.availWidth},height=${screen.availHeight},left=0,top=0`
+      );
+      if (!w) return; // 팝업 차단 시 브라우저 설정 필요
+
+      // 현재 DOM을 그대로 복제하되, 입력값(value)을 HTML에 반영(textarea는 textContent로)
+      const clone = document.documentElement.cloneNode(true);
+
+      const srcTextareas = Array.from(document.querySelectorAll("textarea"));
+      const dstTextareas = Array.from(clone.querySelectorAll("textarea"));
+      for (let i=0;i<Math.min(srcTextareas.length, dstTextareas.length);i++){
+        dstTextareas[i].textContent = srcTextareas[i].value ?? "";
+      }
+
+      const srcInputs = Array.from(document.querySelectorAll("input"));
+      const dstInputs = Array.from(clone.querySelectorAll("input"));
+      for (let i=0;i<Math.min(srcInputs.length, dstInputs.length);i++){
+        const s = srcInputs[i], d = dstInputs[i];
+        if (s.type === "checkbox" || s.type === "radio"){
+          if (s.checked) d.setAttribute("checked","checked");
+          else d.removeAttribute("checked");
+        } else if (s.type !== "file"){
+          d.setAttribute("value", s.value ?? "");
+        }
+      }
+
+      w.document.open();
+      w.document.write("<!doctype html>\n" + clone.outerHTML);
+      w.document.close();
+      try{ w.focus(); }catch(e){}
+    }
+
     async function captureFullPNG(){
       const area = qs("captureArea");
       const canvas = await html2canvas(area, {scale: 2, backgroundColor: null});
@@ -1317,51 +1357,9 @@
       window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
     }
 
-    /* =========================================================
-       ✅ [요청사항 반영] 전체화면 버튼 -> "현재 페이지 그대로" 팝업 전체화면
-       - 구성/배치 변경 없음
-       - 현재 입력 데이터(payload) 주입하여 동일 화면 재현
-    ========================================================= */
-    function openFullPopup(){
-      const payload = makePayload();
-
-      // 팝업 최대화에 가까운 크기로 열기 (브라우저 정책상 완전 fullscreen은 제한될 수 있음)
-      const w = window.open("", "_blank", "popup=yes,noopener,noreferrer");
-      if (!w) return;
-
-      // 현재 문서를 그대로 복제하되, init payload를 body 바로 아래에 주입
-      let html = document.documentElement.outerHTML;
-
-      const safeJson = JSON.stringify(payload)
-        .replace(/</g, "\\u003c")           // </script> 같은 이슈 방지
-        .replace(/-->/g, "--\\u003e");      // 주석 종료 방지(드물지만 안전)
-
-      const inject = `<script>window.__INIT_PAYLOAD = ${safeJson};<\/script>`;
-
-      // <body ...> 바로 다음에 주입
-      html = html.replace(/<body([^>]*)>/i, (m, attrs)=>`<body${attrs}>${inject}`);
-
-      w.document.open();
-      w.document.write(html);
-      w.document.close();
-
-      // 팝업을 가능한 크게 (브라우저 허용 범위 내)
-      try{
-        w.focus();
-        w.moveTo(0,0);
-        w.resizeTo(screen.availWidth, screen.availHeight);
-      }catch(e){}
-    }
-
     function init(){
       setTodayBadge();
-
-      // ✅ 팝업에서 넘어온 payload가 있으면 동일 상태로 로드 (추가 행 생성/초기화 방지)
-      if (window.__INIT_PAYLOAD){
-        loadPayload(window.__INIT_PAYLOAD);
-      }else{
-        addRow({});
-      }
+      if (getRowCount()===0) addRow({});  // ✅ 팝업(복제)에서 중복 행 추가 방지
 
       qs("summaryInput").addEventListener("input", markDirty);
 
@@ -1369,10 +1367,8 @@
       qs("btnDelRow").addEventListener("click", showDeleteRowDialog);
       qs("btnUser").addEventListener("click", showUserDueDialog);
 
-      // ✅ 여기만 변경: 전체화면 버튼은 팝업 전체화면으로
-      qs("btnFull").addEventListener("click", openFullPopup);
+      qs("btnFull").addEventListener("click", openFullPopup); // ✅ [수정] 전체화면 버튼 = 팝업으로 그대로 띄우기
 
-      // 기존 기능 유지
       qs("btnShare").addEventListener("click", shareCapture);
       qs("btnSave").addEventListener("click", save);
       qs("btnLoad").addEventListener("click", load);
